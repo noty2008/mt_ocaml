@@ -1,3 +1,4 @@
+擬似乱数生成アルゴリズム Mersenne Twisterを OCaml で使えるライブラリにしました。
 # 使い方
 mersenne_twister.ml と mt_c.c をコンパイルしてリンクすることで、モジュール Mersenne_twister を使えるようになります。
 　モジュール Mersenne_twister では、次の型や関数が定義されています。

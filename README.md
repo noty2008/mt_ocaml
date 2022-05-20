@@ -88,3 +88,86 @@ mersenne_twister.ml と mt_c.c をコンパイルしてリンクすることで�
 
 
 　使う際は、最初に1度 init_genrand や init_by_array で Mersenne Twister を生成し、以降はそれを genrand_int 等の引数に与えることで乱数を取得してください。
+
+# コンパイル・実行の仕方
+OCaml 環境はインストール済とします。
+以下、Windows + Visual C++ と、Linux + GCC での方法を記します。他の環境でもほぼ同様です。
+
+## インタプリタでの使い方
+### Windows + Visual C++ の場合
+Visual Studio コマンドプロンプトで次のようにすると、インタプリタ mt_interp.exe を生成できます。ユーザが打つのは太字の部分です。
+生成した mt_interp.exe は普通にインタプリタとして使用でき、かつモジュール Mersenne_twister が使えます。
+```
+cl /c /I "C:\Program Files\Objective Caml\lib" mt_c.c
+mt_c.c をコンパイルして mt_c.obj を作る, リンクは行わない（/c オプション）
+"C:\Program Files\Objective Caml\lib" の部分は、OCaml のインストール状況に応じて適切に指定する
+> ocamlmktop -custom mt_c.obj mersenne_twister.ml -o mt_interp.exe
+Mersenne Twister を含めてインタプリタ mt_interp.exe を生成
+```
+
+### Linux + GCC の場合
+ターミナル画面で次のようにすると、インタプリタ mt_interp を生成できます。ユーザが打つのは太字の部分です。
+生成した mt_interp.exe は普通にインタプリタとして使用でき、かつモジュール Mersenne_twister が使えます。
+```
+$ gcc -c -I /usr/lib/ocaml mt_c.c
+mt_c.c をコンパイルして mt_c.o を作る, リンクは行わない（-c オプション）
+/usr/lib/ocaml の部分は、OCaml のインストール状況に応じて適切に指定する
+$ ocamlmktop -custom mt_c.o mersenne_twister.ml -o mt_interp
+Mersenne Twister を含めてインタプリタ mt_interp を生成
+```
+
+## バイトコードコンパイラ ocamlc での使い方
+### Windows + Visual C++ の場合
+モジュール Mersenne_twister を含む OCaml プログラム mt_test.ml を ocamlc でコンパイルするには、Visual Studio コマンドプロンプトで次のようにします。
+ユーザが打つのは太字の部分です。
+```
+> cl /c /I "C:\Program Files\Objective Caml\lib" mt_c.c
+mt_c.c をコンパイルして mt_c.obj を作る, リンクは行わない（/c オプション）
+"C:\Program Files\Objective Caml\lib" の部分は、OCaml のインストール状況に応じて適切に指定する
+> ocamlc -custom mt_c.obj mersenne_twister.ml mt_test.ml -o mt_test.exe
+Mersenne Twister を含めて mt_test.ml をコンパイルし、実行ファイル mt_test.exe を生成
+```
+
+### Linux + GCC の場合
+モジュール Mersenne_twister を含む OCaml プログラム mt_test.ml を ocamlc でコンパイルするには、ターミナル画面で次のようにします。
+ユーザが打つのは太字の部分です。
+```
+$ gcc -c -I /usr/lib/ocaml mt_c.c
+mt_c.c をコンパイルして mt_c.o を作る, リンクは行わない（-c オプション）
+/usr/lib/ocaml の部分は、OCaml のインストール状況に応じて適切に指定する
+$ ocamlc -custom mt_c.o mersenne_twister.ml mt_test.ml -o mt_test
+Mersenne Twister を含めて mt_test.ml をコンパイルし、実行ファイル mt_test を生成
+```
+
+## ネイティブコードコンパイラ ocamlopt での使い方
+### Windows + Visual C++ の場合
+モジュール Mersenne_twister を含む OCaml プログラム mt_test.ml を ocamlopt でコンパイルするには、Visual Studio コマンドプロンプトで次のようにします。
+ユーザが打つのは太字の部分です。
+```
+> cl /c /I "C:\Program Files\Objective Caml\lib" mt_c.c
+mt_c.c をコンパイルして mt_c.obj を作る, リンクは行わない（/c オプション）
+"C:\Program Files\Objective Caml\lib" の部分は、OCaml のインストール状況に応じて適切に指定する
+> ocamlopt mt_c.obj mersenne_twister.ml mt_test.ml -o mt_test.exe
+Mersenne Twister を含めて mt_test.ml をコンパイルし、実行ファイル mt_test.exe を生成
+```
+
+### Linux + GCC の場合
+モジュール Mersenne_twister を含む OCaml プログラム mt_test.ml を ocamlopt でコンパイルするには、ターミナル画面で次のようにします。
+ユーザが打つのは太字の部分です。
+```
+$ gcc -c -I /usr/lib/ocaml mt_c.c
+mt_c.c をコンパイルして mt_c.o を作る, リンクは行わない（-c オプション）
+/usr/lib/ocaml の部分は、OCaml のインストール状況に応じて適切に指定する
+$ ocamlopt mt_c.o mersenne_twister.ml mt_test.ml -o mt_test
+Mersenne Twister を含めて mt_test.ml をコンパイルし、実行ファイル mt_test を生成
+```
+
+## 注意事項
+本ライブラリでは mt_c.c の中で stdint.h を include して使用していますが、コンパイラのバージョンによっては stdint.h が利用できない場合があります。
+その場合は、mt_c.c 中の #include <stdint.h> を削除し、typedef unsigned long uint32_t のような記述を追加してください
+よくわからない場合は、最新版の Visual C++を使うことをお勧めします。
+このプログラムを利用したことにより生じる如何なる損害に対しても、その原因の如何を問わず、開発者は一切の責任を負いません。　
+
+## Mersenne Twister について
+Mersenne Twisterは、松本眞先生と西村拓士先生が開発なさった優れた擬似乱数生成アルゴリズムです。著作権はこの両名に属します。
+Mersenne Twister はBSDライセンスに基づき無償かつ無保証にて頒布されるものです。

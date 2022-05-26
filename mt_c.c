@@ -223,4 +223,3 @@ CAMLprim value init_by_state(value mti_caml, value mta_caml){
 
 	CAMLreturn(mt_caml);
 }
-

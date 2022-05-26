@@ -12,4 +12,3 @@ external genrand_real3 : t -> float = "genrand_real3"
 external genrand_res53 : t -> float = "genrand_res53"
 external copy : t -> t = "copy"
 external get_state : t -> int * int32 array = "get_state"
-

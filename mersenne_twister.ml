@@ -1,5 +1,4 @@
 type t
-
 external init_genrand : int32 -> t = "init_genrand"
 external init_by_array : int32 array -> t = "init_by_array"
 external init_by_state : int -> int32 array -> t = "init_by_state"
